@@ -21,6 +21,13 @@
   stroke: #ccc;
   stroke-width: 1.5px;
 }
+
+.lifetimeLink {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
 .chart {
   font-family: Arial, sans-serif;
   font-size: 10px;
@@ -52,10 +59,11 @@ var monthScale = xScale/12
 var dayScale = xScale/365
 
 var cluster = d3.layout.tree()
-    .size([height, width - 160]);
+    .size([height, width]);
 
-function parseDate(d, mode){
- if(d){
+function parseDate(d){
+    console.log(d);
+    if(d){
 
                 
                 if(d.length<11){
@@ -68,22 +76,57 @@ function parseDate(d, mode){
                     var date =timeFormat3.parse(d);
                     }  
 
-                if(date){         
-                    var loc = (((date.getFullYear()-mode)*xScale)+((date.getMonth()+1)*monthScale)+((date.getDay()*dayScale)));} 
 
-            return loc; }
+
+              
+                    } 
+        
+    if(!d){   
+        var date = timeFormat3.parse("2018");              
+    }
+    if(date){         
+        var loc = (((date.getFullYear()-start)*xScale)+((date.getMonth()+1)*monthScale)+((date.getDay()*dayScale)));
+    } 
+    return loc; 
 
 
 }
 
-var inheritanceDiagonal = d3.svg.diagonal()
-    .source(function(d) { return {"x":parseDate(d.source.start,start),       "y":d.source.x}; })            
-    .target(function(d) { return {"x":parseDate(d.target.start,start), "y":d.target.x}; }) 
-
+var line = d3.svg.line()
+    .x( function(point) { return point.ly; })
+    .y( function(point) { return point.lx; })
+    .interpolate("step-after");
+    //.target(function(d) { return {"x":parseDate(d.target.start,start), "y":d.target.x}; }) 
+    //.projection(function(d) {return [d.x, d.y]; });
             
 //var diagonal = d3.svg.diagonal()
 //    .projection(function(d) { return [d.y, d.x]; });
 
+var lifetimeLine = d3.svg.line()
+    .x( function(point) { return point.ly; })
+    .y( function(point) { return point.lx; })
+    //.interpolate("step-before");
+
+function lineData(d){
+    // i'm assuming here that supplied datum 
+    // is a link between 'source' and 'target'
+    var points = [
+        {lx: d.source.x, ly: parseDate(d.source.start)},
+        {lx: d.source.x, ly: (parseDate(d.target.start)-100)},
+        {lx: d.target.x, ly: parseDate(d.target.start)}
+    ];
+    return line(points);
+}
+
+function lifetimeLineData(d){
+    // i'm assuming here that supplied datum 
+    // is a link between 'source' and 'target'
+    var points = [
+        {lx: d.target.x, ly: parseDate(d.target.start)},
+        {lx: d.target.x, ly: parseDate(d.target.end)}
+    ];
+    return lifetimeLine(points);
+}
 
 var svg = d3.select("body").append("svg")
     .attr("class", "visual")
@@ -95,21 +138,27 @@ var svg = d3.select("body").append("svg")
 d3.json("test.json", function(error, root) {
   var nodes = cluster.nodes(root), links = cluster.links(nodes);
 
-  
+
 
   var link = svg.selectAll(".link")
       .data(links)
     .enter().append("path")
       .attr("class", "link")
-      .attr("d", inheritanceDiagonal);
-      
+      .attr("d", lineData);
+
+//  var lifetimeLink = svg.selectAll(".lifetimeLink")
+//      .data(links)
+//    .enter().append("path")
+//      .attr("class", "lifetimeLink")
+//      .attr("d", lifetimeLineData);
+
   var node = svg.selectAll(".node")
       .data(nodes)
 
     .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) {  
-          return "translate("  + parseDate(d.start,start) + "," + d.x + ")"; })
+          return "translate("  + parseDate(d.start) + "," + d.x + ")"; })
         
 
       
@@ -123,7 +172,7 @@ d3.json("test.json", function(error, root) {
       .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
       .text(function(d) { return d.name;});
       
- 
+
 
     
 });       
