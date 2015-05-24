@@ -47,6 +47,8 @@ var timeFormat = d3.time.format("%Y-%m-%d");
 var timeFormat2 = d3.time.format("%Y-%m");
 var timeFormat3 = d3.time.format("%Y");
 
+var color = d3.scale.category20();
+
 var width = 25000,
     height = 700;
 
@@ -144,8 +146,8 @@ d3.json("test.json", function(error, root) {
       .data(links)
     .enter().append("path")
       .attr("class", "link")
-      .attr("d", lineData);
-
+      .attr("d", lineData)
+      .style("stroke", function(d) { return color(parseDate(d.source.start)); });
 //  var lifetimeLink = svg.selectAll(".lifetimeLink")
 //      .data(links)
 //    .enter().append("path")
