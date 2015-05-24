@@ -2,14 +2,14 @@
 import csv
 import json
 node_list = []
-parents_final = {"name": "origin", "children": [], "start": "1991-01-01"}
+parents_final = {"name": "origin", "children": [], "start": "1991-01-01", "end":"2018"}
 current_working = parents_final["children"]
 
 
 
 def FindChild(parent):
     for node in node_list:
-        if node[3] == parent["name"]:
+        if node[3] == parent["name"]:          
             parent["children"].append({"name" : node[1] , "children" : [],"start" : node[4].replace('.','-') , "end" : node[5].replace('.','-')}) 
 
     
