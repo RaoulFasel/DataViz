@@ -102,22 +102,32 @@ function childX(d){
     }
     
     if(d.parent && !d.children){
-        return d.parent.x+10;
-        
+        var childs=[];
+        d.parent.children.forEach(function(b){
+
+            if(Math.abs(parseDate(b.start)-parseDate(d.start))<20){childs.push(b)}                
+            
+        })
+        return d.parent.x+10*(childs.indexOf(d)+1);
+                
     }
     if(d.parent && d.children){
         var childs = []
-        d.parent.children.forEach(function(d){
-        if(d.children){childs.push(d)}});
+        var childs2 = []
+        d.parent.children.forEach(function(b){
+            if(b.children){childs.push(b)};
+            })
+        d.height = childs2.length 
+        var index = d.parent.children.indexOf(d)            
+        return d.parent.x +(20*(childs.length-childs.indexOf(d) ))
         
-        return d.parent.x +(20*(childs.length-childs.indexOf(d)))
     }
 }
 
 var line = d3.svg.line()
     .x( function(point) { return point.ly; })
     .y( function(point) { return point.lx; })
-    .interpolate("line");
+    .interpolate("step");
 
 function lineData(d){
     // i'm assuming here that supplied datum 
@@ -140,7 +150,7 @@ var svg = d3.select("body").append("svg")
 d3.json("test.json", function(error, root) {
   var nodes = cluster.nodes(root), links = cluster.links(nodes);
   nodes.forEach(function(d){if(d.children){d.children.sort(compare)}});
-  console.log(nodes);
+
   nodes.forEach(function(d){d.x = childX(d)});
   
   var link = svg.selectAll(".link")
@@ -148,7 +158,7 @@ d3.json("test.json", function(error, root) {
     .enter().append("path")
       .attr("class", "link")
       .attr("d", lineData)
-      .style("stroke" , function(d) { return color(parseDate(d.source.start)); })
+      .style("stroke" , function(d) { return color(d.source.x); })
 
   var node = svg.selectAll(".node")
       
@@ -170,12 +180,12 @@ d3.json("test.json", function(error, root) {
       .attr("r", 4.5)
       .style("stroke" , function(d) { 
       if(d.parent){
-        return color(parseDate(d.parent.start));}
+        return color(d.parent.x);}
         })
 
   node.append("text")
-      .attr("dx", function(d) { return d.children ? -8 : 8; })
-      .attr("dy", 4)
+      .attr("dx", function(d) { return d.children ? d.name.length*6 : 8; })
+      .attr("dy", function(d) { return d.children ? 15 : 4; })
       .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
       .text(function(d) { return d.name;});  
   
