@@ -97,7 +97,6 @@ function compare(a,b) {
 function nodeHeight(d){
     
     if(d.children){
-        console.log(d)
         var length = 0;
         d.children.forEach(function(b){
             var childs = []
@@ -113,39 +112,42 @@ function nodeHeight(d){
 
     
 }
-
 function childX(d, parents){
-    if(!d.parent && d.children){
+    if(!d.parent){
         return 20;
     
     }
     
-    if(d.parent && !d.children){
-        var childs=[];
-        d.parent.children.forEach(function(b){
 
-            if(Math.abs(parseDate(b.start)-parseDate(d.start))<20){childs.push(b)}                
-            
-        })
-        return d.parent.x+10*(childs.indexOf(d)+1);
-                
-    }
-    if(d.parent && d.children){
+    if(d.parent){
         var childs = []
         d.parent.children.forEach(function(b){
             if(b.children){childs.push(b)};
             })
-        console.log(parents.indexOf(d))
-        var index = (parents.indexOf(d)+1)
-        console.log(index)
-        if(index<parents.length){    
+        var index = (parents.indexOf(d)-1)
+        if(index){    
             var nodeHeight = parents[index].height;
-            return d.parent.x +(20*(childs.length-childs.indexOf(d)+ nodeHeight ))
+            console.log(d.name,nodeHeight)
+            return d.parent.x +(20*(childs.length-childs.indexOf(d))) +(10*(nodeHeight))
         }
-        else{return d.parent.x +(20*(childs.length-childs.indexOf(d)))}
+        else{
+            return d.parent.x +(20*(childs.length-childs.indexOf(d)))}
     }
+    
 }
 
+function childX2(d){
+    if(d.parent && !d.children){
+        var childs=[];
+        d.parent.children.forEach(function(b){
+            if(!b.children){
+                if(Math.abs(parseDate(b.start)-parseDate(d.start))<110){childs.push(b)}                
+            }
+        })
+        return d.parent.x+10*(childs.indexOf(d)+1);
+                
+    }
+}
 var line = d3.svg.line()
     .x( function(point) { return point.ly; })
     .y( function(point) { return point.lx; })
@@ -182,8 +184,8 @@ d3.json("test.json", function(error, root) {
   parents.forEach(function(d){
       d.height = nodeHeight(d);
   })
-  nodes.forEach(function(d){
-  d.x = childX(d, parents)});
+  nodes.forEach(function(d){if(d.children){d.x = childX(d, parents)}});
+  nodes.forEach(function(d){if(!d.children){d.x = childX2(d)}});
   
   var link = svg.selectAll(".link")
       .data(links)
