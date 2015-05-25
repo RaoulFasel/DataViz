@@ -9,11 +9,8 @@ current_working = parents_final["children"]
 
 def FindChild(parent):
     for node in node_list:
-        if node[3] == parent["name"]:
-            if node[5] == "":
-                parent["children"].append({"name" : node[1] , "children" : [],"start" : node[4].replace('.','-') , "end" : "2018"})
-            else:            
-                parent["children"].append({"name" : node[1] , "children" : [],"start" : node[4].replace('.','-') , "end" : node[5].replace('.','-')}) 
+        if node[3] == parent["name"]:          
+            parent["children"].append({"name" : node[1] , "children" : [],"start" : node[4].replace('.','-') , "end" : node[5].replace('.','-'),"depth" : 100}) 
 
     
     
