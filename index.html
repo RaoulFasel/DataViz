@@ -46,7 +46,7 @@ var timeFormat3 = d3.time.format("%Y");
 var color = d3.scale.category10();
 
 var width = 25000,
-    height = 600;
+    height = 650;
 
 var start = 1990, end = 2015;
 
@@ -94,8 +94,27 @@ function compare(a,b) {
   return 0;
 }
 
+function nodeHeight(d){
+    
+    if(d.children){
+        console.log(d)
+        var length = 0;
+        d.children.forEach(function(b){
+            var childs = []
+            d.children.forEach(function(c){
+                if(Math.abs(parseDate(b.start)-parseDate(c.start))<20){childs.push(b)}
+            })
+            if(childs.length>length){
+                length = childs.length
+            }
+        })
+        return length
+    }
 
-function childX(d){
+    
+}
+
+function childX(d, parents){
     if(!d.parent && d.children){
         return 20;
     
@@ -113,14 +132,17 @@ function childX(d){
     }
     if(d.parent && d.children){
         var childs = []
-        var childs2 = []
         d.parent.children.forEach(function(b){
             if(b.children){childs.push(b)};
             })
-        d.height = childs2.length 
-        var index = d.parent.children.indexOf(d)            
-        return d.parent.x +(20*(childs.length-childs.indexOf(d) ))
-        
+        console.log(parents.indexOf(d))
+        var index = (parents.indexOf(d)+1)
+        console.log(index)
+        if(index<parents.length){    
+            var nodeHeight = parents[index].height;
+            return d.parent.x +(20*(childs.length-childs.indexOf(d)+ nodeHeight ))
+        }
+        else{return d.parent.x +(20*(childs.length-childs.indexOf(d)))}
     }
 }
 
@@ -149,9 +171,19 @@ var svg = d3.select("body").append("svg")
 
 d3.json("test.json", function(error, root) {
   var nodes = cluster.nodes(root), links = cluster.links(nodes);
-  nodes.forEach(function(d){if(d.children){d.children.sort(compare)}});
-
-  nodes.forEach(function(d){d.x = childX(d)});
+  var parents= [];
+  nodes.forEach(function(d){
+  
+  if(d.children){
+    d.children.sort(compare)
+    parents.push(d)
+    }});
+  parents.sort(compare)
+  parents.forEach(function(d){
+      d.height = nodeHeight(d);
+  })
+  nodes.forEach(function(d){
+  d.x = childX(d, parents)});
   
   var link = svg.selectAll(".link")
       .data(links)
