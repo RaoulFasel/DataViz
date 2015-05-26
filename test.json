@@ -1,7 +1,7 @@
 {
     "start": "1991-01-01",
     "end": "2018",
-    "name": "origin",
+    "name": "linux-origin",
     "children": [
         {
             "start": "1993-8-16",
