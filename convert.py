@@ -2,7 +2,7 @@
 import csv
 import json
 node_list = []
-parents_final = {"name": "origin", "children": [], "start": "1991-01-01", "end":"2018"}
+parents_final = {"name": "linux-origin", "children": [], "start": "1991-01-01", "end":"2018"}
 current_working = parents_final["children"]
 
 
