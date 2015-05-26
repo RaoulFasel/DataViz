@@ -250,7 +250,7 @@
                     "children": [
                         {
                             "url": "http://lihuen.info.unlp.edu.ar/",
-                            "start": "2005-9-1",
+                            "start": "2003-9-1",
                             "end": "",
                             "name": "Lihuen",
                             "children": []
@@ -277,21 +277,6 @@
                     "end": "2004-1-14",
                     "name": "miniwoody",
                     "children": []
-                },
-                {
-                    "url": "https://www.mepis.org/",
-                    "start": "2003-5",
-                    "end": "",
-                    "name": "MEPIS",
-                    "children": [
-                        {
-                            "url": "http://antix.mepis.com/",
-                            "start": "2007-8-22",
-                            "end": "",
-                            "name": "antiX",
-                            "children": []
-                        }
-                    ]
                 },
                 {
                     "url": "http://www.activasistemas.com/index.php?id=7",
@@ -1094,7 +1079,7 @@
                     "children": [
                         {
                             "url": "http://siduction.org/",
-                            "start": "2011-12-21",
+                            "start": "2007-12-21",
                             "end": "",
                             "name": "siduction",
                             "children": []
@@ -1327,7 +1312,7 @@
             "children": [
                 {
                     "url": "http://en.ophonesdn.com/",
-                    "start": "2009-8",
+                    "start": "2008-01",
                     "end": "",
                     "name": "Ophone",
                     "children": []
@@ -1552,45 +1537,10 @@
             "children": []
         },
         {
-            "start": "1998-11",
-            "end": "1999-5-17",
-            "name": "Project Ballantin",
-            "children": [
-                {
-                    "url": "http://www.freesco.org/",
-                    "start": "1999-5-17",
-                    "end": "",
-                    "name": "FREESCO",
-                    "children": []
-                }
-            ]
-        },
-        {
             "start": "2002-10",
             "end": "",
             "name": "LinuxConsole",
             "children": []
-        },
-        {
-            "start": "2001-10",
-            "end": "",
-            "name": "Sorcerer",
-            "children": [
-                {
-                    "url": "http://www.lunar-linux.org/",
-                    "start": "2002-3",
-                    "end": "",
-                    "name": "Lunar",
-                    "children": []
-                },
-                {
-                    "url": "http://www.sourcemage.org/",
-                    "start": "2002-4",
-                    "end": "",
-                    "name": "Source Mage",
-                    "children": []
-                }
-            ]
         },
         {
             "start": "2003",
@@ -1893,20 +1843,6 @@
             "end": "2007-2-6",
             "name": "QiLinux",
             "children": []
-        },
-        {
-            "start": "1998-8",
-            "end": "",
-            "name": "ROCK",
-            "children": [
-                {
-                    "url": "http://www.t2-project.org/",
-                    "start": "2004-10-3",
-                    "end": "",
-                    "name": "T2",
-                    "children": []
-                }
-            ]
         },
         {
             "start": "1999-12",
@@ -2460,13 +2396,6 @@
                     "start": "2000-10-24",
                     "end": "2004-12-24",
                     "name": "Best",
-                    "children": []
-                },
-                {
-                    "url": "http://www.rocksclusters.org/",
-                    "start": "2000-11",
-                    "end": "",
-                    "name": "Rocks",
                     "children": []
                 },
                 {

@@ -101,7 +101,7 @@ function nodeHeight(d){
         d.children.forEach(function(b){
             var childs = []
             d.children.forEach(function(c){
-                if(Math.abs(parseDate(b.start)-parseDate(c.start))<20){childs.push(b)}
+                if(Math.abs(parseDate(b.start)-parseDate(c.start))<100){childs.push(b)}
             })
             if(childs.length>length){
                 length = childs.length
@@ -121,17 +121,26 @@ function childX(d, parents){
 
     if(d.parent){
         var childs = []
+        var newParents = []
+        parents.forEach(function(b){
+            if(d.parent.children.indexOf(b)!=-1){
+                newParents.push(b)
+                }
+            })
         d.parent.children.forEach(function(b){
             if(b.children){childs.push(b)};
             })
-        var index = (parents.indexOf(d)-1)
-        if(index){    
-            var nodeHeight = parents[index].height;
-            console.log(d.name,nodeHeight)
+        var index = (newParents.indexOf(d)+1)
+        if(index<newParents.length && d.name !="gnuLiNex" && d.name != "NetStation"){    
+            var nodeHeight = newParents[index].height;
             return d.parent.x +(20*(childs.length-childs.indexOf(d))) +(10*(nodeHeight))
         }
+        if(d.name=="gnuLiNex"){return d.parent.x+(20*(4))}
+        if(d.name=="NetStation"){return d.parent.x+(20*(7.5))}
         else{
-            return d.parent.x +(20*(childs.length-childs.indexOf(d)))}
+            return d.parent.x+(20*(childs.length-childs.indexOf(d)))}
+            
+        
     }
     
 }
@@ -141,7 +150,7 @@ function childX2(d){
         var childs=[];
         d.parent.children.forEach(function(b){
             if(!b.children){
-                if(Math.abs(parseDate(b.start)-parseDate(d.start))<110){childs.push(b)}                
+                if(Math.abs(parseDate(b.start)-parseDate(d.start))<100){childs.push(b)}                
             }
         })
         return d.parent.x+10*(childs.indexOf(d)+1);
@@ -174,8 +183,9 @@ var svg = d3.select("body").append("svg")
 d3.json("test.json", function(error, root) {
   var nodes = cluster.nodes(root), links = cluster.links(nodes);
   var parents= [];
-  nodes.forEach(function(d){
   
+  nodes.forEach(function(d){
+  console.log(d)
   if(d.children){
     d.children.sort(compare)
     parents.push(d)
